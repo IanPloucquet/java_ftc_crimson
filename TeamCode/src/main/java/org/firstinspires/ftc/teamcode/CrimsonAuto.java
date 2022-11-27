@@ -64,17 +64,17 @@ public class CrimsonAuto extends LinearOpMode {
         backLeftEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         backRightEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
-        if (inches >= 0) {
-            frontLeftEx.setVelocity(power);
-            frontRightEx.setVelocity(power);
-            backLeftEx.setVelocity(power);
-            backRightEx.setVelocity(power);
-        }
+            if (inches >= 0) {
+                frontLeftEx.setVelocity(power);
+                frontRightEx.setVelocity(power);
+                backLeftEx.setVelocity(power);
+                backRightEx.setVelocity(power);
+            }
 
-        //while loop: all motors are busy -> {}
-        while (frontLeftEx.isBusy() && frontRightEx.isBusy() && backLeftEx.isBusy() && backRightEx.isBusy()) {
+            //while loop: all motors are busy -> {}
+            while (frontLeftEx.isBusy() && frontRightEx.isBusy() && backLeftEx.isBusy() && backRightEx.isBusy()) {
 
-        }
+            }
         frontLeftEx.setVelocity(0);
         frontRightEx.setVelocity(0);
         backLeftEx.setVelocity(0);
