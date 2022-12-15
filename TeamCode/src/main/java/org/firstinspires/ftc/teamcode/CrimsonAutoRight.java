@@ -41,8 +41,8 @@ public class CrimsonAutoRight extends LinearOpMode {
             backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            rotateR(.46);
-            sleep(2000);
+            rotateR(.5);
+            sleep(780);
         }
     }
 

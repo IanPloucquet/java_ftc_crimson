@@ -37,18 +37,23 @@ public class Test extends OpMode {
        }
        while (gamepad2.a);*/
        if (gamepad2.a) {
+           arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
            arm.setTargetPosition(120);
            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
            arm.setVelocity(120);
-           arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+           while (arm.isBusy()) {
+
+           }
            arm.setVelocity(0);
        }
-
        else if (gamepad2.b) {
+           arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
            arm.setTargetPosition(200);
            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
            arm.setVelocity(200);
-           arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+           while (arm.isBusy()) {
+
+           }
            arm.setVelocity(0);
        }
 

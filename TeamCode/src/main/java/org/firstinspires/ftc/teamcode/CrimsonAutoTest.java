@@ -58,7 +58,6 @@ public class CrimsonAutoTest extends LinearOpMode {
             if (S.green() < 20) {
 
             }
-            //double  : power now uses similar units to sleep (probably as a result to setting the motors to Velocity instead of Power)
         }
     }
 
