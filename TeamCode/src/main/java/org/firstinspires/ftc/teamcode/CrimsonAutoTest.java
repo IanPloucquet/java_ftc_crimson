@@ -48,7 +48,7 @@ public class CrimsonAutoTest extends LinearOpMode {
 
             forward(7, 2000);
             backward(7,2000);
-
+            //variable power is used to tell the motors how many rotations it should go in a second (1440 ticks is a full 360 degrees)
             if (S.blue() < 20) {
 
             }
@@ -66,12 +66,12 @@ public class CrimsonAutoTest extends LinearOpMode {
         frontLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         backLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         backREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-
+                //stops and resets the encoders in order for them to read and execute code from your current position
         frontLEx.setTargetPosition(inchestoticks(inches));
         frontREx.setTargetPosition(inchestoticks(inches));
         backREx.setTargetPosition(inchestoticks(inches));
         backLEx.setTargetPosition(inchestoticks(inches));
-
+                //set the target position to go a distance in inches via the inchestoticks class created before
         frontREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         frontLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         backLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -88,6 +88,7 @@ public class CrimsonAutoTest extends LinearOpMode {
             while (frontLEx.isBusy() && frontREx.isBusy() && backLEx.isBusy() && backREx.isBusy()) {
 
             }
+
         frontLEx.setVelocity(0);
         frontREx.setVelocity(0);
         backLEx.setVelocity(0);
@@ -110,15 +111,15 @@ public class CrimsonAutoTest extends LinearOpMode {
         backLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         backREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
-        if (inches >= 0) {
-            frontLEx.setVelocity(-power);
-            frontREx.setVelocity(-power);
-            backLEx.setVelocity(-power);
-            backREx.setVelocity(-power);
-        }
-        while (frontLEx.isBusy() && frontREx.isBusy() && backLEx.isBusy() && backREx.isBusy()) {
+            if (inches >= 0) {
+                frontLEx.setVelocity(-power);
+                frontREx.setVelocity(-power);
+                backLEx.setVelocity(-power);
+                backREx.setVelocity(-power);
+            }
+            while (frontLEx.isBusy() && frontREx.isBusy() && backLEx.isBusy() && backREx.isBusy()) {
 
-        }
+            }
         frontLEx.setVelocity(0);
         frontREx.setVelocity(0);
         backLEx.setVelocity(0);
@@ -131,12 +132,10 @@ public class CrimsonAutoTest extends LinearOpMode {
         backLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         backREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-
         frontLEx.setTargetPosition(inchestoticks(inches));
         frontREx.setTargetPosition(inchestoticks(-inches));
         backREx.setTargetPosition(inchestoticks(inches));
         backLEx.setTargetPosition(inchestoticks(-inches));
-
 
         frontREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         frontLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -153,6 +152,7 @@ public class CrimsonAutoTest extends LinearOpMode {
             while (frontLEx.isBusy() && frontREx.isBusy() && backLEx.isBusy() && backREx.isBusy()) {
 
             }
+
         frontLEx.setVelocity(0);
         frontREx.setVelocity(0);
         backLEx.setVelocity(0);
@@ -165,12 +165,10 @@ public class CrimsonAutoTest extends LinearOpMode {
         backLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         backREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-
         frontLEx.setTargetPosition(inchestoticks(-inches));
         frontREx.setTargetPosition(inchestoticks(inches));
         backREx.setTargetPosition(inchestoticks(-inches));
         backLEx.setTargetPosition(inchestoticks(inches));
-
 
         frontREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         frontLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -187,6 +185,7 @@ public class CrimsonAutoTest extends LinearOpMode {
             while (frontLEx.isBusy() && frontREx.isBusy() && backLEx.isBusy() && backREx.isBusy()) {
 
             }
+
         frontLEx.setVelocity(0);
         frontREx.setVelocity(0);
         backLEx.setVelocity(0);
