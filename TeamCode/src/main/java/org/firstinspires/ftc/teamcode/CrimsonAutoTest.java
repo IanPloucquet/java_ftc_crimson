@@ -192,6 +192,6 @@ public class CrimsonAutoTest extends LinearOpMode {
         frontREx.setVelocity(0);
         backLEx.setVelocity(0);
         backREx.setVelocity(0);
-
     }
+
 }
