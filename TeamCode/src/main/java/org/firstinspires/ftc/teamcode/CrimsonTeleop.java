@@ -25,8 +25,8 @@ public class CrimsonTeleop extends OpMode {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-        arm = hardwareMap.get(DcMotor.class, "arm");
 
+        arm = hardwareMap.get(DcMotor.class, "arm");
         hinge = hardwareMap.get(Servo.class,"hinge");
         claw = hardwareMap.get(Servo.class,"claw");
 
@@ -42,10 +42,10 @@ public class CrimsonTeleop extends OpMode {
         double y = gamepad1.left_stick_y * speed;
         double r = gamepad1.left_stick_x * speed;
 
-        frontLeft.setPower(-y-x-r);
-        frontRight.setPower(-y+x+r);
-        backLeft.setPower(-y-x+r);
-        backRight.setPower(-y+x-r);
+        frontLeft.setPower(-y - x - r);
+        frontRight.setPower(-y + x + r);
+        backLeft.setPower(-y - x + r);
+        backRight.setPower(-y + x - r);
         if (gamepad1.right_bumper && speed < 0.8) {
             speed += 0.01;
         }
@@ -55,16 +55,27 @@ public class CrimsonTeleop extends OpMode {
         // allows for input to gamepad to translate to movement;
         // Movement of stick sets power for motors
 
-        double m = gamepad2.left_stick_y * speed;
-        double t = gamepad2.right_stick_y * speed;
+        double m = gamepad2.left_stick_y * 0.8;
+        double t = gamepad2.right_stick_y;
+        double k = gamepad2.right_trigger * speed;
+        double l = gamepad2.left_trigger * speed;
 
-        arm.setPower(m);
+       /*if (m < 0) {
+           arm.setPower(m);
+           arm.setTargetPosition(200);
+       }*/
+      //  hinge.setPosition(t);
+
+        if (gamepad2.a) {
+            claw.setPosition(0.5);
+        }
 
 
-        hinge.setPosition(t); 
-
-
+        if (gamepad2.b) {
+            claw.setPosition(0);
+        }
     }
-}
+    }
+
 
 
