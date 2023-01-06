@@ -16,6 +16,9 @@ public class Test extends OpMode {
 
     double speed = 0.6;
 
+    public final static double MIN_POSITION = 0.6;
+    public final static double MAX_POSITION = 0.4;
+
     @Override
     public void init() {
         arm = hardwareMap.get(DcMotorEx.class, "arm");
@@ -28,46 +31,37 @@ public class Test extends OpMode {
     public void loop() {
         double m = gamepad2.left_stick_y;
         double t = gamepad2.dpad_up?0.4:0.6;
-        double k = gamepad2.right_trigger * speed;
-        double l = gamepad2.left_trigger * speed;
 
-       /*do {
-           arm.setPower(speed);
-           arm.setTargetPosition(100);
-       }
-       while (gamepad2.a);*/
        if (gamepad2.a) {
-           arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-           arm.setTargetPosition(120);
+           arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+           arm.setTargetPosition(150);
            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-           arm.setVelocity(120);
-           while (arm.isBusy()) {
-
-           }
-           arm.setVelocity(0);
+           arm.setVelocity(150);
+           arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        }
        else if (gamepad2.b) {
-           arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-           arm.setTargetPosition(200);
+           arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+           arm.setTargetPosition(-50);
            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-           arm.setVelocity(200);
-           while (arm.isBusy()) {
-
-           }
-           arm.setVelocity(0);
+           arm.setVelocity(-150);
+           arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        }
-
        if (gamepad2.dpad_up) {
            hinge.setPosition(t);
        }
 
-        if (gamepad2.left_bumper) {
-            claw.setPosition(0.5);
+       if (gamepad2.right_bumper) {
+            claw.setPosition(MIN_POSITION);
         }
 
-        if (gamepad2.right_bumper) {
-            claw.setPosition(0.8);
+       if (gamepad2.left_bumper) {
+            claw.setPosition(MAX_POSITION);
         }
+
+       telemetry.addData("Arm enocder pos: ", arm.getCurrentPosition());
+       telemetry.update();
+       //telemetry adds data onto the driver hub's screen (also what the get methods are for); very useful for calculations and figuring out certain things
+
     }
 }
 

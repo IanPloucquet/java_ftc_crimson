@@ -3,35 +3,43 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 @TeleOp
 public class CrimsonTeleop extends OpMode {
     // frontLeft, frontRight, backLeft, backRight are the names of the motors that will be used
+    public final static double CMIN_POSITION = 0.6;
+    public final static double CMAX_POSITION = 0.4;
 
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
-    DcMotor arm;
+    public final static double HMAX_POSITION = 0.4;
+    public final static double HMIN_POSITION = 0.6;
+    DcMotor frontL;
+    DcMotor frontR;
+    DcMotor backL;
+    DcMotor backR;
+    DcMotorEx arm;
 
     Servo hinge;
     Servo claw;
 
+    ColorSensor S;
     double speed = 0.6;
     @Override
     public void init() {
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
+        frontL = hardwareMap.get(DcMotor.class, "frontL");
+        frontR = hardwareMap.get(DcMotor.class, "frontR");
+        backL = hardwareMap.get(DcMotor.class, "backL");
+        backR = hardwareMap.get(DcMotor.class, "backR");
 
-        arm = hardwareMap.get(DcMotor.class, "arm");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
         hinge = hardwareMap.get(Servo.class,"hinge");
         claw = hardwareMap.get(Servo.class,"claw");
 
-        backRight.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backR.setDirection(DcMotor.Direction.REVERSE);
+        frontR.setDirection(DcMotor.Direction.REVERSE);
+        arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
     }
     // assigns dc motors as hardware
 
@@ -42,10 +50,10 @@ public class CrimsonTeleop extends OpMode {
         double y = gamepad1.left_stick_y * speed;
         double r = gamepad1.left_stick_x * speed;
 
-        frontLeft.setPower(-y - x - r);
-        frontRight.setPower(-y + x + r);
-        backLeft.setPower(-y - x + r);
-        backRight.setPower(-y + x - r);
+        frontL.setPower(-y - x - r);
+        frontR.setPower(-y + x + r);
+        backL.setPower(-y - x + r);
+        backR.setPower(-y + x - r);
         if (gamepad1.right_bumper && speed < 0.8) {
             speed += 0.01;
         }
@@ -55,27 +63,58 @@ public class CrimsonTeleop extends OpMode {
         // allows for input to gamepad to translate to movement;
         // Movement of stick sets power for motors
 
-        double m = gamepad2.left_stick_y * 0.8;
-        double t = gamepad2.right_stick_y;
-        double k = gamepad2.right_trigger * speed;
-        double l = gamepad2.left_trigger * speed;
-
-       /*if (m < 0) {
-           arm.setPower(m);
-           arm.setTargetPosition(200);
-       }*/
-      //  hinge.setPosition(t);
-
         if (gamepad2.a) {
-            claw.setPosition(0.5);
+            arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            arm.setTargetPosition(200);
+            arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            arm.setVelocity(200);
+        }
+        else if (gamepad2.b) {
+            arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            arm.setTargetPosition(300);
+            arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            arm.setVelocity(200);
+        }
+        else if (gamepad2.y) {
+            arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            arm.setTargetPosition(400);
+            arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            arm.setVelocity(200);
+        }
+        else if (gamepad2.x) {
+            arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            arm.setTargetPosition(0);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm.setVelocity(200);
+        }
+        telemetry.addData("Arm encoder pos: ", arm.getCurrentPosition());
+
+        if (gamepad2.left_stick_y > 0) {
+            hinge.setPosition(0.6);
+        }
+        if (gamepad2.left_stick_y < 0) {
+            hinge.setPosition(0.4);
+        }
+        if (gamepad2.left_stick_y == 0) {
+
+            hinge.setPosition(0.5);
+            /*for (gamepad2.right_stick_y > 0);
+            throw ();*/
+        }
+        telemetry.addData("Hinge position:", hinge.getPosition());
+
+        if (gamepad2.right_bumper) {
+            claw.setPosition(CMIN_POSITION);
         }
 
-
-        if (gamepad2.b) {
-            claw.setPosition(0);
+        if (gamepad2.left_bumper) {
+            claw.setPosition(CMAX_POSITION);
         }
+
+        telemetry.addData("color", S.argb());
+        telemetry.update();
     }
-    }
+}
 
 
 

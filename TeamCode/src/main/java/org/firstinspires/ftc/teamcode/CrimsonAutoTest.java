@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode;
-//  PLEASE NOTE: this is not final and has ideas that have not been complete
+//  PLEASE NOTE: this is not final and contains some incomplete ideas
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -46,8 +46,9 @@ public class CrimsonAutoTest extends LinearOpMode {
             backREx.setDirection(DcMotorEx.Direction.REVERSE);
             frontREx.setDirection(DcMotorEx.Direction.REVERSE);
 
-            forward(7, 2000);
-            backward(7,2000);
+            forward(1, 1440);
+
+            backward(7,1440);
             //variable power is used to tell the motors how many rotations it should go in a second (1440 ticks is a full 360 degrees)
             if (S.blue() < 20) {
 
@@ -190,5 +191,8 @@ public class CrimsonAutoTest extends LinearOpMode {
         frontREx.setVelocity(0);
         backLEx.setVelocity(0);
         backREx.setVelocity(0);
+    }
+    public void rotateR(int inches, double power) {
+
     }
 }
