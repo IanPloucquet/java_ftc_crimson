@@ -22,6 +22,9 @@ public class CrimsonAutoRedL extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
+        if (isStopRequested()) {
+        }
         if (opModeIsActive()) {
             frontL = hardwareMap.get(DcMotor.class, "frontL");
             frontR = hardwareMap.get(DcMotor.class, "frontR");
@@ -37,11 +40,6 @@ public class CrimsonAutoRedL extends LinearOpMode {
             frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            waitForStart();
-        if (isStopRequested()) {
-
-        }
 
             claw.setPosition(MAX_POSITION);
             sleep(5000);

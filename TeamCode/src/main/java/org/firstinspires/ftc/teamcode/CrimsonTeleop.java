@@ -14,7 +14,7 @@ public class CrimsonTeleop extends OpMode {
     public final static double CMAX_POSITION = 0.4;
 
     public final static double HMAX_POSITION = 0.4;
-    public final static double HMIN_POSITION = 0.6;
+    public final static double HMIN_POSITION = 0.7;
     DcMotor frontL;
     DcMotor frontR;
     DcMotor backL;
@@ -63,37 +63,27 @@ public class CrimsonTeleop extends OpMode {
         // allows for input to gamepad to translate to movement;
         // Movement of stick sets power for motors
 
-        if (gamepad2.a) {
-            arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            arm.setTargetPosition(200);
-            arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            arm.setVelocity(200);
-        }
-        else if (gamepad2.b) {
+        while (gamepad2.a) {
             arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
             arm.setTargetPosition(300);
             arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            arm.setVelocity(200);
+            arm.setVelocity(1000);
+            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
-        else if (gamepad2.y) {
+         while (gamepad2.b) {
             arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            arm.setTargetPosition(400);
+            arm.setTargetPosition(-100);
             arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            arm.setVelocity(200);
-        }
-        else if (gamepad2.x) {
-            arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            arm.setTargetPosition(0);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm.setVelocity(200);
+            arm.setVelocity(-150);
+            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
         telemetry.addData("Arm encoder pos: ", arm.getCurrentPosition());
 
         if (gamepad2.left_stick_y > 0) {
-            hinge.setPosition(0.6);
+            hinge.setPosition(HMIN_POSITION);
         }
         if (gamepad2.left_stick_y < 0) {
-            hinge.setPosition(0.4);
+            hinge.setPosition(HMAX_POSITION);
         }
         if (gamepad2.left_stick_y == 0) {
 
@@ -111,7 +101,6 @@ public class CrimsonTeleop extends OpMode {
             claw.setPosition(CMAX_POSITION);
         }
 
-        telemetry.addData("color", S.argb());
         telemetry.update();
     }
 }
