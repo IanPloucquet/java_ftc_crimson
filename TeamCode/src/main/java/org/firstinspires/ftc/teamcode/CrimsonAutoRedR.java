@@ -44,25 +44,28 @@ public class CrimsonAutoRedR extends LinearOpMode {
             backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            if (S.red() > 0) {
-                backward(.7);
-                sleep(500);
-                left(.7);
-                sleep(400);
-                forward(.7);
-                sleep(500);
-            }
-            else if (S.blue() > 0) {
-                forward(0.5);
-                sleep(500);
-            }
-            else if (S.green() > 0) {
-            left(0.5);
-            sleep(500);
-            }
-            else {
 
-            }
+                while (S.red() > 0) {
+                    backward(.7);
+                    sleep(500);
+                    left(.7);
+                    sleep(400);
+                    forward(.7);
+                    sleep(500);
+                    forward(0);
+
+                }
+                while (S.blue() > 0) {
+                    forward(0.5);
+                    sleep(500);
+                }
+                while (S.green() > 0) {
+                left(0.5);
+                sleep(500);
+                }
+                {
+
+                }
         }
     }
 

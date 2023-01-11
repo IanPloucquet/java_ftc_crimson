@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 @TeleOp
 public class CrimsonTeleop extends OpMode {
     // frontLeft, frontRight, backLeft, backRight are the names of the motors that will be used
-    public final static double CMIN_POSITION = 0.6;
+    public final static double CMIN_POSITION = 0.52;
     public final static double CMAX_POSITION = 0.4;
 
     public final static double HMAX_POSITION = 0.4;
@@ -63,19 +63,23 @@ public class CrimsonTeleop extends OpMode {
         // allows for input to gamepad to translate to movement;
         // Movement of stick sets power for motors
 
-        while (gamepad2.a) {
+        if (gamepad2.a) {
             arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            arm.setTargetPosition(300);
+            arm.setTargetPosition(270);
             arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             arm.setVelocity(1000);
-            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
-         while (gamepad2.b) {
+        if (gamepad2.b) {
             arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            arm.setTargetPosition(-100);
+            arm.setTargetPosition(520);
             arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            arm.setVelocity(-150);
-            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            arm.setVelocity(1000);
+        }
+        if (gamepad2.y) {
+            arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            arm.setTargetPosition(950);
+            arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            arm.setVelocity(1000);
         }
         telemetry.addData("Arm encoder pos: ", arm.getCurrentPosition());
 
@@ -90,6 +94,9 @@ public class CrimsonTeleop extends OpMode {
             hinge.setPosition(0.5);
             /*for (gamepad2.right_stick_y > 0);
             throw ();*/
+        }
+        while (gamepad2.x == true) {
+            arm.setPower(.2);
         }
         telemetry.addData("Hinge position:", hinge.getPosition());
 
