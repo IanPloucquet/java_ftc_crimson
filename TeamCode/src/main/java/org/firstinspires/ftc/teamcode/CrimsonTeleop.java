@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,22 +10,27 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 @TeleOp
 public class CrimsonTeleop extends OpMode {
     // frontLeft, frontRight, backLeft, backRight are the names of the motors that will be used
-    public final static double CMIN_POSITION = 0.52;
-    public final static double CMAX_POSITION = 0.4;
+    public final static double CMIN_POSITION = 0.3;
+    public final static double CMAX_POSITION = 0.6;
+/*
+    public final static double HMAX_POSITION = 1;
+    public final static double HMIN_POSITION = 0;
+    */
 
-    public final static double HMAX_POSITION = 0.4;
-    public final static double HMIN_POSITION = 0.7;
-    DcMotor frontL;
-    DcMotor frontR;
-    DcMotor backL;
-    DcMotor backR;
-    DcMotorEx arm;
 
-    Servo hinge;
-    Servo claw;
+    private DcMotor frontL;
+    private DcMotor frontR;
+    private DcMotor backL;
+    private DcMotor backR;
+    private DcMotorEx arm;
 
-    ColorSensor S;
-    double speed = 0.6;
+    private Servo hinge;
+    private Servo claw;
+
+    private ColorSensor S;
+
+    private double speed = 0.6;
+
     @Override
     public void init() {
         frontL = hardwareMap.get(DcMotor.class, "frontL");
@@ -81,33 +86,37 @@ public class CrimsonTeleop extends OpMode {
             arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             arm.setVelocity(1000);
         }
-        telemetry.addData("Arm encoder pos: ", arm.getCurrentPosition());
+        if (gamepad2.x) {
+            arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            arm.setTargetPosition(arm.getCurrentPosition() - 50);
+            arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            arm.setVelocity(1000);
+        }
+
+        telemetry.addData("Arm encoder pos", arm.getCurrentPosition());
 
         if (gamepad2.left_stick_y > 0) {
-            hinge.setPosition(HMIN_POSITION);
+            hinge.setPosition(.2);
         }
-        if (gamepad2.left_stick_y < 0) {
-            hinge.setPosition(HMAX_POSITION);
-        }
-        if (gamepad2.left_stick_y == 0) {
 
-            hinge.setPosition(0.5);
-            /*for (gamepad2.right_stick_y > 0);
-            throw ();*/
+        if (gamepad2.left_stick_y < 0) {
+            hinge.setPosition(.9);
         }
-        while (gamepad2.x == true) {
-            arm.setPower(.2);
+
+        if (gamepad2.left_stick_y == 0) {
+            hinge.setPosition(.65);
         }
-        telemetry.addData("Hinge position:", hinge.getPosition());
 
         if (gamepad2.right_bumper) {
-            claw.setPosition(CMIN_POSITION);
+            claw.setPosition(.35);
         }
 
         if (gamepad2.left_bumper) {
-            claw.setPosition(CMAX_POSITION);
+            claw.setPosition(.55);
         }
 
+        telemetry.addData("Hinge position", hinge.getPosition());
+//        telemetry.addData("Color Value", S)
         telemetry.update();
     }
 }

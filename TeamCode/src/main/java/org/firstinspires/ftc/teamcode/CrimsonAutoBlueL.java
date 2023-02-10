@@ -1,50 +1,39 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.annotation.SuppressLint;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import java.lang.*;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-@Autonomous(name = "AutoRedRight")
-public class CrimsonAutoRedR extends LinearOpMode {
+@Autonomous(name = "AutoBlueLeft")
+public class CrimsonAutoBlueL extends LinearOpMode {
 
     public final static double MIN_POSITION = 0.2;
     public final static double MAX_POSITION = 0.7;
 
-    DcMotor frontL;
-    DcMotor frontR;
-    DcMotor backL;
-    DcMotor backR;
+    private DcMotor frontL;
+    private DcMotor frontR;
+    private DcMotor backL;
+    private DcMotor backR;
+    private Servo hinge;
+    private Servo claw;
 
-
-    Servo claw;
-    DcMotorEx arm;
-    Servo hinge;
-
-
-    ColorSensor S;
+    private ColorSensor S;
 
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
         if (isStopRequested()) {
+
         }
         if (opModeIsActive()) {
             frontL = hardwareMap.get(DcMotor.class, "frontL");
             frontR = hardwareMap.get(DcMotor.class, "frontR");
             backL = hardwareMap.get(DcMotor.class, "backL");
             backR = hardwareMap.get(DcMotor.class, "backR");
-
             claw = hardwareMap.get(Servo.class, "claw");
-            arm = hardwareMap.get(DcMotorEx.class, "arm");
-            hinge = hardwareMap.get(Servo.class,"hinge");
-
-
             S = hardwareMap.get(ColorSensor.class, "S");
 
             backR.setDirection(DcMotor.Direction.REVERSE);
@@ -55,56 +44,46 @@ public class CrimsonAutoRedR extends LinearOpMode {
             backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-
-            claw.setPosition(MIN_POSITION);
-            sleep(2800);
-
-            forward(0.2);
-            sleep(200);
-
-            left(0.4);
-            sleep(1000);
-
-            forward(0.4);
-            sleep(1000);
-
-            rotateL(0.2);
-            sleep(200);
-
-            arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            arm.setTargetPosition(900);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm.setVelocity(1000);
-
-            hinge.setPosition(0.7);
-            sleep(4000);
-            forward(0.2);
-            sleep(400);
-
+            hinge.setPosition(MAX_POSITION);
+            sleep(5000);
             claw.setPosition(MAX_POSITION);
-            sleep(200);
+            sleep(5000);      //to keep claw and hinge in place
 
-                while (S.red() > S.blue() + S.green()) {
-                    backward(.7);
-                    sleep(500);
-                    left(.7);
-                    sleep(400);
-                    forward(.7);
-                    sleep(500);
-                    forward(0);
+            left();                     //get to closest ground junction
+            sleep();
+            forward();
+            sleep();                    //position the claw for ground junction
 
-                }
-                while (S.blue() > 0) {
-                    forward(0.5);
-                    sleep(500);
-                }
-                while (S.green() > 0) {
+            hinge.setPosition();
+            sleep();
+            claw.setPosition(MIN_POSITION);
+            sleep();
+            hinge.setPosition(MAX_POSITION);
+            sleep();                    //place preloaded cone and reset hinge
+
+            right();
+            sleep();
+            forward();
+            sleep();                    //move to colored sleeve to read
+
+            if (S.red() > 0) {
+                backward(.7);
+                sleep(500);
+                left(.7);
+                sleep(400);
+                forward(.7);
+                sleep(500);
+            }
+            else if (S.blue() > 0) {
+
+            }
+            else if (S.green() > 0) {
                 left(0.5);
                 sleep(500);
-                }
-                {
+            }
+            else {
 
-                }
+            }
         }
     }
 

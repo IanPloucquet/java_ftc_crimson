@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 //  PLEASE NOTE: this is not final and contains some incomplete ideas
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 import java.lang.*;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
@@ -12,21 +14,24 @@ import static java.lang.Math.PI;
 @Autonomous(name = "Auto")
 public class CrimsonAutoTest extends LinearOpMode {
 
-    DcMotorEx frontLEx;
-    DcMotorEx frontREx;
-    DcMotorEx backLEx;
-    DcMotorEx backREx;
+    DcMotorEx frontL;
+    DcMotorEx frontR;
+    DcMotorEx backL;
+    DcMotorEx backR;
+    DcMotorEx arm;
+    Servo claw;
+    Servo hinge;
 
     ColorSensor S;
 
     static final double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
-    static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
+    static final double WHEEL_DIAMETER_INCHES = 3.5;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * PI);
 
-    public int inchestoticks(int inches) {
-        return (int) (inches * COUNTS_PER_INCH);//diameter of the wheel 3.77
+    public double inchestoticks(double inches) {
+        return (double) (inches * COUNTS_PER_INCH);//diameter of the wheel 3.77
 
     }
 
@@ -37,162 +42,267 @@ public class CrimsonAutoTest extends LinearOpMode {
 
         }
         if (opModeIsActive()) {
-            frontLEx = hardwareMap.get(DcMotorEx.class, "frontL");
-            frontREx = hardwareMap.get(DcMotorEx.class, "frontR");
-            backLEx = hardwareMap.get(DcMotorEx.class, "backL");
-            backREx = hardwareMap.get(DcMotorEx.class, "backR");
+            frontL = hardwareMap.get(DcMotorEx.class, "frontL");
+            frontR = hardwareMap.get(DcMotorEx.class, "frontR");
+            backL = hardwareMap.get(DcMotorEx.class, "backL");
+            backR = hardwareMap.get(DcMotorEx.class, "backR");
+            arm = hardwareMap.get(DcMotorEx.class, "arm");
             S = hardwareMap.get(ColorSensor.class, "S");
 
-            backREx.setDirection(DcMotorEx.Direction.REVERSE);
-            frontREx.setDirection(DcMotorEx.Direction.REVERSE);
+            backR.setDirection(DcMotorEx.Direction.REVERSE);
+            frontR.setDirection(DcMotorEx.Direction.REVERSE);
+            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            forward(1, 1440);
+            /*claw.setPosition(.6);
+            sleep(100);
+            forward(1, 500);
+            right(20,1440);
+            forward(24,1440);
+            rotateR(4, 1440);
 
-            backward(7,1440);
+            arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            arm.setTargetPosition(950);
+            arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            arm.setVelocity(1000);
+
+            hinge.setPosition(0.9);
+            sleep(700);
+
+            hinge.setPosition(.2);
+            sleep(700);
+
+            claw.setPosition(.4);
+            sleep(300);
+
+            */
+            forward(3, 1200);
+            left(2, 1400);
+            forward(1, 1200);
             //variable power is used to tell the motors how many rotations it should go in a second (1440 ticks is a full 360 degrees)
-            if (S.blue() < 20) {
+            int red = S.red();
+            int green = S.green();
+            int blue = S.blue();
+            telemetry.addData("Red: ", S.red());
+            telemetry.update();
+            telemetry.addData("Blue: ", S.blue());
+            telemetry.update();
+            telemetry.addData("Green: ", S.green());
+            telemetry.update();
 
+            if (red > blue && red > green) {
+                right(1, 500);
+                forward(2, 500);
+                right(5, 500);
+                forward(2, 500);
             }
-            if (S.red() < 20) {
 
+
+            if (blue > red && blue > green) {
+                right(1, 500);
+                forward(3, 500);
             }
-            if (S.green() < 20) {
 
+            if (green > blue && green > red) {
+                right(1, 500);
+                forward(2, 500);
+                left(5, 500);
+                forward(2, 500);
             }
         }
     }
 
-    public void forward(int inches, double power) {
-        frontREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        frontLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        backLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        backREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+    public void forward(double inches, double power) {
+        frontR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        frontL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                 //stops and resets the encoders in order for them to read and execute code from your current position
-        frontLEx.setTargetPosition(inchestoticks(inches));
-        frontREx.setTargetPosition(inchestoticks(inches));
-        backREx.setTargetPosition(inchestoticks(inches));
-        backLEx.setTargetPosition(inchestoticks(inches));
+        frontL.setTargetPosition((int) inchestoticks(inches));
+        frontR.setTargetPosition((int) inchestoticks(inches));
+        backR.setTargetPosition((int) inchestoticks(inches));
+        backL.setTargetPosition((int) inchestoticks(inches));
                 //set the target position to go a distance in inches via the inchestoticks class created before
-        frontREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        frontLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        backLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        backREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
             if (inches >= 0) {
-                frontLEx.setVelocity(power);
-                frontREx.setVelocity(power);
-                backLEx.setVelocity(power);
-                backREx.setVelocity(power);
+                frontL.setVelocity(power);
+                frontR.setVelocity(power);
+                backL.setVelocity(power);
+                backR.setVelocity(power);
             }
 
             //while loop: all motors are busy -> {}
-            while (frontLEx.isBusy() && frontREx.isBusy() && backLEx.isBusy() && backREx.isBusy()) {
+            while (frontL.isBusy() && frontR.isBusy() && backL.isBusy() && backR.isBusy()) {
 
             }
 
-        frontLEx.setVelocity(0);
-        frontREx.setVelocity(0);
-        backLEx.setVelocity(0);
-        backREx.setVelocity(0);
+        frontL.setVelocity(0);
+        frontR.setVelocity(0);
+        backL.setVelocity(0);
+        backR.setVelocity(0);
     }
 
-    public void backward(int inches, double power) {
-        frontREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        frontLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        backLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        backREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+    public void backward(double inches, double power) {
+        frontR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        frontL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontLEx.setTargetPosition(inchestoticks(-inches));
-        frontREx.setTargetPosition(inchestoticks(-inches));
-        backREx.setTargetPosition(inchestoticks(-inches));
-        backLEx.setTargetPosition(inchestoticks(-inches));
+        frontL.setTargetPosition((int) inchestoticks(-inches));
+        frontR.setTargetPosition((int) inchestoticks(-inches));
+        backR.setTargetPosition((int) inchestoticks(-inches));
+        backL.setTargetPosition((int) inchestoticks(-inches));
 
-        frontREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        frontLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        backLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        backREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
             if (inches >= 0) {
-                frontLEx.setVelocity(-power);
-                frontREx.setVelocity(-power);
-                backLEx.setVelocity(-power);
-                backREx.setVelocity(-power);
+                frontL.setVelocity(-power);
+                frontR.setVelocity(-power);
+                backL.setVelocity(-power);
+                backR.setVelocity(-power);
             }
-            while (frontLEx.isBusy() && frontREx.isBusy() && backLEx.isBusy() && backREx.isBusy()) {
+            while (frontL.isBusy() && frontR.isBusy() && backL.isBusy() && backR.isBusy()) {
 
             }
-        frontLEx.setVelocity(0);
-        frontREx.setVelocity(0);
-        backLEx.setVelocity(0);
-        backREx.setVelocity(0);
+        frontL.setVelocity(0);
+        frontR.setVelocity(0);
+        backL.setVelocity(0);
+        backR.setVelocity(0);
     }
 
-    public void left(int inches, double power) {
-        frontREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        frontLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        backLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        backREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+    public void left(double inches, double power) {
+        frontR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        frontL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontLEx.setTargetPosition(inchestoticks(inches));
-        frontREx.setTargetPosition(inchestoticks(-inches));
-        backREx.setTargetPosition(inchestoticks(inches));
-        backLEx.setTargetPosition(inchestoticks(-inches));
+        frontL.setTargetPosition((int) inchestoticks(inches));
+        frontR.setTargetPosition((int) inchestoticks(-inches));
+        backR.setTargetPosition((int) inchestoticks(inches));
+        backL.setTargetPosition((int) inchestoticks(-inches));
 
-        frontREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        frontLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        backLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        backREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
             if (inches >= 0) {
-                frontLEx.setVelocity(power);
-                frontREx.setVelocity(-power);
-                backLEx.setVelocity(power);
-                backREx.setVelocity(-power);
+                frontL.setVelocity(power);
+                frontR.setVelocity(-power);
+                backL.setVelocity(-power);
+                backR.setVelocity(power);
             }
 
-            while (frontLEx.isBusy() && frontREx.isBusy() && backLEx.isBusy() && backREx.isBusy()) {
+            while (frontL.isBusy() && frontR.isBusy() && backL.isBusy() && backR.isBusy()) {
 
             }
 
-        frontLEx.setVelocity(0);
-        frontREx.setVelocity(0);
-        backLEx.setVelocity(0);
-        backREx.setVelocity(0);
+        frontL.setVelocity(0);
+        frontR.setVelocity(0);
+        backL.setVelocity(0);
+        backR.setVelocity(0);
     }
 
-    public void right(int inches, double power) {
-        frontREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        frontLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        backLEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        backREx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+    public void right(double inches, double power) {
+        frontR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        frontL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontLEx.setTargetPosition(inchestoticks(-inches));
-        frontREx.setTargetPosition(inchestoticks(inches));
-        backREx.setTargetPosition(inchestoticks(-inches));
-        backLEx.setTargetPosition(inchestoticks(inches));
+        frontL.setTargetPosition((int) inchestoticks(-inches));
+        frontR.setTargetPosition((int) inchestoticks(inches));
+        backR.setTargetPosition((int) inchestoticks(-inches));
+        backL.setTargetPosition((int) inchestoticks(inches));
 
-        frontREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        frontLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        backLEx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        backREx.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
             if (inches >= 0) {
-                frontLEx.setVelocity(-power);
-                frontREx.setVelocity(power);
-                backLEx.setVelocity(-power);
-                backREx.setVelocity(power);
+                frontL.setVelocity(-power);
+                frontR.setVelocity(power);
+                backL.setVelocity(power);
+                backR.setVelocity(-power);
             }
 
-            while (frontLEx.isBusy() && frontREx.isBusy() && backLEx.isBusy() && backREx.isBusy()) {
+            while (frontL.isBusy() && frontR.isBusy() && backL.isBusy() && backR.isBusy()) {
 
             }
 
-        frontLEx.setVelocity(0);
-        frontREx.setVelocity(0);
-        backLEx.setVelocity(0);
-        backREx.setVelocity(0);
+        frontL.setVelocity(0);
+        frontR.setVelocity(0);
+        backL.setVelocity(0);
+        backR.setVelocity(0);
     }
-    public void rotateR(int inches, double power) {
+    public void rotateR(double inches, double power) {
+        frontR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        frontL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
+        frontL.setTargetPosition((int) inchestoticks(-inches));
+        frontR.setTargetPosition((int) inchestoticks(inches));
+        backR.setTargetPosition((int) inchestoticks(-inches));
+        backL.setTargetPosition((int) inchestoticks(inches));
+
+        frontR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+
+        if (inches >= 0) {
+            frontL.setVelocity(-power);
+            frontR.setVelocity(power);
+            backL.setVelocity(-power);
+            backR.setVelocity(power);
+        }
+
+        while (frontL.isBusy() && frontR.isBusy() && backL.isBusy() && backR.isBusy()) {
+
+        }
+
+        frontL.setVelocity(0);
+        frontR.setVelocity(0);
+        backL.setVelocity(0);
+        backR.setVelocity(0);
+    }
+    public void rotateL(double inches, double power) {
+        frontR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        frontL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        backR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontL.setTargetPosition((int)inchestoticks(-inches));
+        frontR.setTargetPosition((int) inchestoticks(inches));
+        backR.setTargetPosition((int) inchestoticks(-inches));
+        backL.setTargetPosition((int) inchestoticks(inches));
+
+        frontR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+
+        if (inches >= 0) {
+            frontL.setVelocity(power);
+            frontR.setVelocity(-power);
+            backL.setVelocity(power);
+            backR.setVelocity(-power);
+        }
+
+        while (frontL.isBusy() && frontR.isBusy() && backL.isBusy() && backR.isBusy()) {
+
+        }
+
+        frontL.setVelocity(0);
+        frontR.setVelocity(0);
+        backL.setVelocity(0);
+        backR.setVelocity(0);
     }
 }
