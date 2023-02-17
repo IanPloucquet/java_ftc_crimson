@@ -14,7 +14,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.ArrayList;
 
-@TeleOp
+@TeleOp(name = "AprilTagAuto")
 public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
@@ -25,7 +25,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {
     DcMotor backL;
     CRServo Claw;
     double diameter = 3.5; // inches
-    double fullRotationTicks = 537.7; // ticks
+    double fullRotationTicks = 1440; // ticks
     // fullRotationTicks : circumference
     // 537.7 / (pi * diameter)
     // basically, for 1 ticks, the robot travels 537.7 ticks / (pi * diameter)
