@@ -32,45 +32,45 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {
     int ticksPerInch = (int) (fullRotationTicks / Math.PI * diameter); // ticks / inch
 
     public void forward(double power) {
-        frontL.setPower(power);
-        frontR.setPower(power);
-        backL.setPower(power);
-        backR.setPower(power);
+        frontL.setPower(-power);
+        frontR.setPower(-power);
+        backL.setPower(-power);
+        backR.setPower(-power);
     }
 
     public void backward(double power) {
-        frontL.setPower(-power);
-        frontR.setPower(-power);
-        backL.setPower(-power);
-        backR.setPower(-power);
+        frontL.setPower(power);
+        frontR.setPower(power);
+        backL.setPower(power);
+        backR.setPower(power);
     }
 
     public void left(double power) {
-        frontL.setPower(power);
-        frontR.setPower(-power);
-        backL.setPower(-power);
-        backR.setPower(power);
+        frontL.setPower(-power);
+        frontR.setPower(power);
+        backL.setPower(power);
+        backR.setPower(-power);
     }
 
     public void right(double power) {
-        frontL.setPower(-power);
-        frontR.setPower(power);
-        backL.setPower(power);
-        backR.setPower(-power);
-    }
-
-    public void rotateR(double power) {
-        frontL.setPower(-power);
-        frontR.setPower(power);
+        frontL.setPower(power);
+        frontR.setPower(-power);
         backL.setPower(-power);
         backR.setPower(power);
     }
 
-    public void rotateL(double power) {
+    public void rotateR(double power) {
         frontL.setPower(power);
         frontR.setPower(-power);
         backL.setPower(power);
         backR.setPower(-power);
+    }
+
+    public void rotateL(double power) {
+        frontL.setPower(-power);
+        frontR.setPower(power);
+        backL.setPower(-power);
+        backR.setPower(power);
     }
 
     // public void Move_Right(int i, int ticksPerInch) {
